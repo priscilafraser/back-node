@@ -24,7 +24,7 @@ app.post('/login', (req,res) => {
             return res.status(401).send({message: 'Conexão não autorizada'})
         }       
         var sql = 'select * from fornecedor where email = $1'
-        var dados = [req.body.email]
+        let dados = [req.body.email]
         client.query(sql, dados, (error, result) => {
             if(error) {
                 return res.status(500).send({ message: 'Erro ao selecionar fornecedor'})
@@ -64,7 +64,7 @@ app.post('/login', (req,res) => {
             }  
             
             var sql2 = 'select * from cliente where email = $1'
-            var dados2 = [req.body.email]
+            let dados2 = [req.body.email]
             client.query(sql2, dados2, (error, result) => {
                 if(error) {
                     return res.status(500).send({ message: 'Erro ao selecionar cliente'})
@@ -100,7 +100,7 @@ app.post('/login', (req,res) => {
                     })
                 } else {
                     var sql3 = 'select * from adm where email = $1'
-                    var dados3 = [req.body.email]
+                    let dados3 = [req.body.email]
                     client.query(sql3, dados3, (error, result) => {
                         if(error) {
                             return res.status(500).send({ message: 'Erro ao selecionar ADM'})
@@ -151,7 +151,7 @@ app.post('/cadastro-fornecedor', (req, res) => {
             })
         }
         var sql = 'select * from fornecedor where cnpj=$1'
-        var dados1 = [req.body.cnpj]
+        let dados1 = [req.body.cnpj]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
                 return res.status(500).send({message:'Fornecedor já cadastrado'})
@@ -161,7 +161,7 @@ app.post('/cadastro-fornecedor', (req, res) => {
                         return res.status(500).send({message: 'Erro de autenticação'})
                     }       
                     var sql = 'insert into fornecedor (razaosocial, cnpj, telefone, email, cep, logradouro, numero, complemento, bairro,cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
-                    var dados = [req.body.razaosocial, req.body.cnpj, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro,req.body.cidade, req.body.estado, req.body.perfil, hash]
+                    let dados = [req.body.razaosocial, req.body.cnpj, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro,req.body.cidade, req.body.estado, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
                             return res.status(500).send({
@@ -191,7 +191,7 @@ app.post('/cadastro-cliente', (req, res) => {
             })
         }
         var sql = 'select * from cliente where email=$1'
-        var dados1 = [req.body.email]
+        let dados1 = [req.body.email]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
                 return res.status(500).send({message:'Cliente já cadastrado'})
@@ -202,7 +202,7 @@ app.post('/cadastro-cliente', (req, res) => {
                     }
         
                     var sql = 'insert into cliente (nome, cpf, telefone, email, cep, logradouro, numero, complemento, bairro, cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
-                    var dados = [req.body.nome, req.body.cpf, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro, req.body.cidade, req.body.estado, req.body.perfil, hash]
+                    let dados = [req.body.nome, req.body.cpf, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro, req.body.cidade, req.body.estado, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
                             return res.status(500).send({
@@ -230,7 +230,7 @@ app.post('/cadastro-adm', (req, res) => {
             })
         }
         var sql = 'select * from adm where perfil=$1'
-        var dados1 = [req.body.perfil]
+        let dados1 = [req.body.perfil]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
                 return res.status(500).send({message:'ADM já cadastrado'})
@@ -240,7 +240,7 @@ app.post('/cadastro-adm', (req, res) => {
                         return res.status(500).send({message: 'Erro de autenticação', erro: error.message})
                     }       
                     var sql = 'insert into adm (email, perfil, senha) values ($1, $2, $3)'
-                    var dados = [req.body.email, req.body.perfil, hash]
+                    let dados = [req.body.email, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
                             return res.status(500).send({
@@ -270,7 +270,7 @@ app.post('/contato', (req, res) => {
         }
 
         var sql = 'insert into contato (nome, email, telefone, assunto, mensagem) values ($1, $2, $3, $4, $5)'
-        var dados = [req.body.nome, req.body.email, req.body.telefone, req.body.assunto, req.body.mensagem]
+        let dados = [req.body.nome, req.body.email, req.body.telefone, req.body.assunto, req.body.mensagem]
         client.query(sql, dados, (error, result) => {
             if(error) {
                 return res.status(500).send({
@@ -293,9 +293,9 @@ app.post('/obterLojista', (req, res) => {
             })
         }
         var token = req.body.token
-        var tokenDecriptado = jwt.verify(token, 'chave secreta')
-        var sql = 'select * from fornecedor where id = $1'
-        var dados = [tokenDecriptado.id]
+        let tokenDecriptado = jwt.verify(token, 'chave secreta')
+        let sql = 'select * from fornecedor where id = $1'
+        let dados = [tokenDecriptado.id]
         client.query(sql, dados, (error, result) => {
             if(error) {
                 return res.status(500).send({
@@ -318,13 +318,13 @@ app.post('/alterarLojista', (req, res) => {
         }
         console.log(req.body)
         var id = req.body.id
-        var dadosFornecedor = req.body.dadosFornecedor
-        var sql = `
+        let dadosFornecedor = req.body.dadosFornecedor
+        let sql = `
         UPDATE fornecedor
         SET razaosocial=$1, cnpj=$2, telefone=$3, email=$4, cep=$5, logradouro=$6, numero=$7, complemento=$8, bairro=$9, estado=$10, cidade=$11
         WHERE id = $12
     `
-        var dados = [dadosFornecedor.razaosocial, dadosFornecedor.cnpj, dadosFornecedor.telefone, dadosFornecedor.email,dadosFornecedor.cep, dadosFornecedor.logradouro,  dadosFornecedor.numero, dadosFornecedor.complemento, dadosFornecedor.bairro, dadosFornecedor.estado,dadosFornecedor.cidade, id]
+        let dados = [dadosFornecedor.razaosocial, dadosFornecedor.cnpj, dadosFornecedor.telefone, dadosFornecedor.email,dadosFornecedor.cep, dadosFornecedor.logradouro,  dadosFornecedor.numero, dadosFornecedor.complemento, dadosFornecedor.bairro, dadosFornecedor.estado,dadosFornecedor.cidade, id]
         client.query(sql, dados, (error, result) => {
             if(error) {
                 return res.status(500).send({
@@ -348,11 +348,11 @@ app.post('/cadastro-produto', (req, res) => {
             })
         }
         var dadosProduto = req.body.dadosProduto
-        var idfornecedor = parseInt(req.body.idfornecedor)
-        var sql = 'insert into produto (produtos, idtipoproduto, idcategoria) values ($1, $2, $3) RETURNING idproduto'
-        var dados = [dadosProduto.produtos, dadosProduto.idtipoproduto, dadosProduto.idcategoria, ]
+        let idfornecedor = parseInt(req.body.idfornecedor)
+        let sql = 'insert into produto (produtos, idtipoproduto, idcategoria) values ($1, $2, $3) RETURNING idproduto'
+        let dados = [dadosProduto.produtos, dadosProduto.idtipoproduto, dadosProduto.idcategoria, ]
         client.query(sql, dados, (error, result) => {
-            var idproduto = result.rows[0].idproduto
+            let idproduto = result.rows[0].idproduto
             if(error) {
                 return res.status(500).send({
                     message: 'Erro ao inserir produto',
@@ -360,7 +360,7 @@ app.post('/cadastro-produto', (req, res) => {
                 })
             }
             var sqlLigacaoFornecdor = 'insert into ligacaofornecedorproduto (idproduto, idfornecedor, preco, descricao) values ($1, $2, $3, $4)'
-            var dadosLigacaoFornecedor = [idproduto, idfornecedor, dadosProduto.preco, dadosProduto.produtos]
+            let dadosLigacaoFornecedor = [idproduto, idfornecedor, dadosProduto.preco, dadosProduto.produtos]
             console.log(dadosLigacaoFornecedor)
             client.query(sqlLigacaoFornecdor, dadosLigacaoFornecedor, (error, result) => {
                 console.log(error)
@@ -386,9 +386,9 @@ app.post('/cadastro-servico', (req, res) => {
             })
         }
         var dadosServico = req.body.dadosServico
-        var idfornecedor = req.body.idfornecedor
-        var sql = 'insert into servico (servicos,horarioInicial, horarioFinal, preco, idcategoria, idtiposervico) values ($1, $2, $3, $4, $5, $6)  RETURNING idservico'
-        var dados = [dadosServico.servicos, dadosServico.horarioInicial, dadosServico.horarioFinal, dadosServico.preco, dadosServico.idcategoria, dadosServico.idtiposervico]
+        let idfornecedor = req.body.idfornecedor
+        let sql = 'insert into servico (servicos,horarioInicial, horarioFinal, preco, idcategoria, idtiposervico) values ($1, $2, $3, $4, $5, $6)  RETURNING idservico'
+        let dados = [dadosServico.servicos, dadosServico.horarioInicial, dadosServico.horarioFinal, dadosServico.preco, dadosServico.idcategoria, dadosServico.idtiposervico]
         client.query(sql, dados, (error, result) => {
             if(error) {
                 return res.status(500).send({
@@ -398,7 +398,7 @@ app.post('/cadastro-servico', (req, res) => {
             }
             var idservico = result.rows[0].idservico
             console.log(idservico)
-            var queryLigacaoFornecedorServico = "insert into ligacaofornecedorservico (idservico, idfornecedor) values ($1, $2)"
+            let queryLigacaoFornecedorServico = "insert into ligacaofornecedorservico (idservico, idfornecedor) values ($1, $2)"
             var dadosParaLigacao = [idservico, idfornecedor]
             client.query(queryLigacaoFornecedorServico, dadosParaLigacao, (error, result) => {
                 if(error) {
@@ -431,7 +431,7 @@ app.post('/obter-produtos-do-fornecedor', (req, res) => {
             var sql = `
             select produto.*, categoria.descricao as categoria, ligacaofornecedorproduto.preco, ligacaofornecedorproduto.descricao as produtos, tipoproduto.produto as tipoproduto from produto join ligacaofornecedorproduto on ligacaofornecedorproduto.idproduto = produto.idproduto join categoria on categoria.id = produto.idcategoria join tipoproduto on tipoproduto.idtipoproduto = produto.idtipoproduto where ligacaofornecedorproduto.idfornecedor = $1
         `
-            var dados = [req.body.idfornecedor]
+            let dados = [req.body.idfornecedor]
             client.query(sql, dados, (error, result) => {
                 if(error) {
                     return res.status(500).send({
@@ -461,7 +461,7 @@ app.post('/obter-servicos-do-fornecedor', (req, res) => {
             var sql = `
             select servico.*, categoria.descricao as categoria, tiposervico.servico as tiposervico from servico join ligacaofornecedorservico on ligacaofornecedorservico.idservico = servico.idservico join categoria on categoria.id = servico.idcategoria join tiposervico on tiposervico.idtiposervico = servico.idtiposervico where ligacaofornecedorservico.idfornecedor = $1
         `
-            var dados = [req.body.idfornecedor]
+            let dados = [req.body.idfornecedor]
             client.query(sql, dados, (error, result) => {
                 if(error) {
                     return res.status(500).send({
