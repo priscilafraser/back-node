@@ -63,7 +63,7 @@ app.post('/login', (req,res) => {
                 })
             }  
             
-            var sql2 = 'select * from cliente where email = $1'
+            let sql2 = 'select * from cliente where email = $1'
             let dados2 = [req.body.email]
             client.query(sql2, dados2, (error, result) => {
                 if(error) {
@@ -99,7 +99,7 @@ app.post('/login', (req,res) => {
                         return res.status(401).send({message: 'Senha não confere'})
                     })
                 } else {
-                    var sql3 = 'select * from adm where email = $1'
+                    let sql3 = 'select * from adm where email = $1'
                     let dados3 = [req.body.email]
                     client.query(sql3, dados3, (error, result) => {
                         if(error) {
@@ -150,7 +150,7 @@ app.post('/cadastro-fornecedor', (req, res) => {
                 message: 'Conexão não autorizada'
             })
         }
-        var sql = 'select * from fornecedor where cnpj=$1'
+        let sql = 'select * from fornecedor where cnpj=$1'
         let dados1 = [req.body.cnpj]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
@@ -160,7 +160,7 @@ app.post('/cadastro-fornecedor', (req, res) => {
                     if(error) {
                         return res.status(500).send({message: 'Erro de autenticação'})
                     }       
-                    var sql = 'insert into fornecedor (razaosocial, cnpj, telefone, email, cep, logradouro, numero, complemento, bairro,cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
+                    let sql = 'insert into fornecedor (razaosocial, cnpj, telefone, email, cep, logradouro, numero, complemento, bairro,cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
                     let dados = [req.body.razaosocial, req.body.cnpj, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro,req.body.cidade, req.body.estado, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
@@ -190,7 +190,7 @@ app.post('/cadastro-cliente', (req, res) => {
                 message: 'Conexão não autorizada'
             })
         }
-        var sql = 'select * from cliente where email=$1'
+        let sql = 'select * from cliente where email=$1'
         let dados1 = [req.body.email]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
@@ -201,7 +201,7 @@ app.post('/cadastro-cliente', (req, res) => {
                         return res.status(500).send({message: 'Erro de autenticação'})
                     }
         
-                    var sql = 'insert into cliente (nome, cpf, telefone, email, cep, logradouro, numero, complemento, bairro, cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
+                    let sql = 'insert into cliente (nome, cpf, telefone, email, cep, logradouro, numero, complemento, bairro, cidade, estado, perfil, senha) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)'
                     let dados = [req.body.nome, req.body.cpf, req.body.telefone, req.body.email, req.body.cep, req.body.logradouro, req.body.numero, req.body.complemento, req.body.bairro, req.body.cidade, req.body.estado, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
@@ -229,7 +229,7 @@ app.post('/cadastro-adm', (req, res) => {
                 message: 'Conexão não autorizada'
             })
         }
-        var sql = 'select * from adm where perfil=$1'
+        let sql = 'select * from adm where perfil=$1'
         let dados1 = [req.body.perfil]
         client.query(sql, dados1, (err, result) => {
             if(result.rowCount > 0) {
@@ -239,7 +239,7 @@ app.post('/cadastro-adm', (req, res) => {
                     if(error) {
                         return res.status(500).send({message: 'Erro de autenticação', erro: error.message})
                     }       
-                    var sql = 'insert into adm (email, perfil, senha) values ($1, $2, $3)'
+                    let sql = 'insert into adm (email, perfil, senha) values ($1, $2, $3)'
                     let dados = [req.body.email, req.body.perfil, hash]
                     client.query(sql, dados, (error, result) => {
                         if(error) {
@@ -269,7 +269,7 @@ app.post('/contato', (req, res) => {
             })
         }
 
-        var sql = 'insert into contato (nome, email, telefone, assunto, mensagem) values ($1, $2, $3, $4, $5)'
+        let sql = 'insert into contato (nome, email, telefone, assunto, mensagem) values ($1, $2, $3, $4, $5)'
         let dados = [req.body.nome, req.body.email, req.body.telefone, req.body.assunto, req.body.mensagem]
         client.query(sql, dados, (error, result) => {
             if(error) {
@@ -292,7 +292,7 @@ app.post('/obterLojista', (req, res) => {
                 message: 'Conexão nao autorizada'
             })
         }
-        var token = req.body.token
+        let token = req.body.token
         let tokenDecriptado = jwt.verify(token, 'chave secreta')
         let sql = 'select * from fornecedor where id = $1'
         let dados = [tokenDecriptado.id]
@@ -317,7 +317,7 @@ app.post('/alterarLojista', (req, res) => {
             })
         }
         console.log(req.body)
-        var id = req.body.id
+        let id = req.body.id
         let dadosFornecedor = req.body.dadosFornecedor
         let sql = `
         UPDATE fornecedor
@@ -347,7 +347,7 @@ app.post('/cadastro-produto', (req, res) => {
                 message: 'Conexão não autorizada'
             })
         }
-        var dadosProduto = req.body.dadosProduto
+        let dadosProduto = req.body.dadosProduto
         let idfornecedor = parseInt(req.body.idfornecedor)
         let sql = 'insert into produto (produtos, idtipoproduto, idcategoria) values ($1, $2, $3) RETURNING idproduto'
         let dados = [dadosProduto.produtos, dadosProduto.idtipoproduto, dadosProduto.idcategoria, ]
@@ -359,7 +359,7 @@ app.post('/cadastro-produto', (req, res) => {
                     erro: error.message
                 })
             }
-            var sqlLigacaoFornecdor = 'insert into ligacaofornecedorproduto (idproduto, idfornecedor, preco, descricao) values ($1, $2, $3, $4)'
+            let sqlLigacaoFornecdor = 'insert into ligacaofornecedorproduto (idproduto, idfornecedor, preco, descricao) values ($1, $2, $3, $4)'
             let dadosLigacaoFornecedor = [idproduto, idfornecedor, dadosProduto.preco, dadosProduto.produtos]
             console.log(dadosLigacaoFornecedor)
             client.query(sqlLigacaoFornecdor, dadosLigacaoFornecedor, (error, result) => {
@@ -385,7 +385,7 @@ app.post('/cadastro-servico', (req, res) => {
                 message: 'Conexão não autorizada'
             })
         }
-        var dadosServico = req.body.dadosServico
+        let dadosServico = req.body.dadosServico
         let idfornecedor = req.body.idfornecedor
         let sql = 'insert into servico (servicos,horarioInicial, horarioFinal, preco, idcategoria, idtiposervico) values ($1, $2, $3, $4, $5, $6)  RETURNING idservico'
         let dados = [dadosServico.servicos, dadosServico.horarioInicial, dadosServico.horarioFinal, dadosServico.preco, dadosServico.idcategoria, dadosServico.idtiposervico]
@@ -396,10 +396,10 @@ app.post('/cadastro-servico', (req, res) => {
                     erro: error.message
                 })
             }
-            var idservico = result.rows[0].idservico
+            let idservico = result.rows[0].idservico
             console.log(idservico)
             let queryLigacaoFornecedorServico = "insert into ligacaofornecedorservico (idservico, idfornecedor) values ($1, $2)"
-            var dadosParaLigacao = [idservico, idfornecedor]
+            let dadosParaLigacao = [idservico, idfornecedor]
             client.query(queryLigacaoFornecedorServico, dadosParaLigacao, (error, result) => {
                 if(error) {
                     return res.status(500).send({
@@ -428,7 +428,7 @@ app.post('/obter-produtos-do-fornecedor', (req, res) => {
                     message: 'Conexão nao autorizada'
                 })
             }
-            var sql = `
+            let sql = `
             select produto.*, categoria.descricao as categoria, ligacaofornecedorproduto.preco, ligacaofornecedorproduto.descricao as produtos, tipoproduto.produto as tipoproduto from produto join ligacaofornecedorproduto on ligacaofornecedorproduto.idproduto = produto.idproduto join categoria on categoria.id = produto.idcategoria join tipoproduto on tipoproduto.idtipoproduto = produto.idtipoproduto where ligacaofornecedorproduto.idfornecedor = $1
         `
             let dados = [req.body.idfornecedor]
@@ -458,7 +458,7 @@ app.post('/obter-servicos-do-fornecedor', (req, res) => {
                     message: 'Conexão nao autorizada'
                 })
             }
-            var sql = `
+            let sql = `
             select servico.*, categoria.descricao as categoria, tiposervico.servico as tiposervico from servico join ligacaofornecedorservico on ligacaofornecedorservico.idservico = servico.idservico join categoria on categoria.id = servico.idcategoria join tiposervico on tiposervico.idtiposervico = servico.idtiposervico where ligacaofornecedorservico.idfornecedor = $1
         `
             let dados = [req.body.idfornecedor]
@@ -500,14 +500,14 @@ app.get('/produtos', (req, res) => {
 app.post('/deletar-servico', (req, res) => {
     pool.connect((err, client, release) => {
         try{
-            var idservico = req.body.idservico;
+            let idservico = req.body.idservico;
             if (err) {
                 return res.status(401).send({
                     message: 'Conexão nao autorizada'
                 })
             }
-            var sql = `delete from servico where idservico = $1`
-            var dados = [idservico]
+            let sql = `delete from servico where idservico = $1`
+            let dados = [idservico]
             client.query(sql, dados, (error, result) => {
                 if(error) {
                     console.log(error)
@@ -532,14 +532,14 @@ app.post('/deletar-servico', (req, res) => {
 app.post('/deletar-produto', (req, res) => {
     pool.connect((err, client, release) => {
         try{
-            var idproduto = req.body.idproduto;
+            let idproduto = req.body.idproduto;
             if (err) {
                 return res.status(401).send({
                     message: 'Conexão nao autorizada'
                 })
             }
-            var sql = `delete from produto where idproduto = $1`
-            var dados = [idproduto]
+            let sql = `delete from produto where idproduto = $1`
+            let dados = [idproduto]
             client.query(sql, dados, (error, result) => {
                 if(error) {
                     console.log(error)
@@ -647,8 +647,8 @@ app.get('/prodFornecedor/:idfornecedor', (req, res) => {
             })
         }
 
-        var sql = `select * from ligacao_fornecedor_produto where idfornecedor = $1`
-        var dados = [req.params.idfornecedor]
+        let sql = `select * from ligacao_fornecedor_produto where idfornecedor = $1`
+        let dados = [req.params.idfornecedor]
 
         client.query(sql, dados, (error, result) => {
             if(error) {
@@ -672,8 +672,8 @@ app.get('/servFornecedor/:idfornecedor', (req, res) => {
             })
         }
 
-        var sql = `select * from ligacao_fornecedor_servico where idfornecedor = $1`
-        var dados = [req.params.idfornecedor]
+        let sql = `select * from ligacao_fornecedor_servico where idfornecedor = $1`
+        let dados = [req.params.idfornecedor]
 
         client.query(sql, dados, (error, result) => {
             if(error) {
