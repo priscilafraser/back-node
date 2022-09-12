@@ -6,11 +6,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const cors = require('cors')
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
-    app.use(cors());
-    next();
-});
+app.use(cors());
+app.options("*", cors());
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
