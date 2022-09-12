@@ -3,19 +3,21 @@ const app = express()
 const pg = require('pg')
 const port = process.env.PORT   
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken');  //token
+const jwt = require('jsonwebtoken');
 const cors = require('cors')
 
-
-//para pegar os dados do formulario
-app.use(cors())
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    app.use(cors());
+    next();
+});
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 
 const consStr = process.env.DATABASE_URL
 const pool = new pg.Pool({ connectionString: consStr, ssl: { rejectUnauthorized: false} }) 
-//, ssl: { rejectUnauthorized: false}
 
 ///////LOGIN
 app.post('/login', (req,res) => {
@@ -23,7 +25,7 @@ app.post('/login', (req,res) => {
         if(err) {
             return res.status(401).send({message: 'Conexão não autorizada'})
         }       
-        var sql = 'select * from fornecedor where email = $1'
+        let sql = 'select * from fornecedor where email = $1'
         let dados = [req.body.email]
         client.query(sql, dados, (error, result) => {
             if(error) {
@@ -181,7 +183,6 @@ app.post('/cadastro-fornecedor', (req, res) => {
 })
 
 
-/////////////////////////////////////////////////////
 /////////CADASTRO USUARIO
 app.post('/cadastro-cliente', (req, res) => {
     pool.connect((err, client, release) => {
@@ -220,7 +221,7 @@ app.post('/cadastro-cliente', (req, res) => {
     })
 })
 
-/////////////////////////////
+
 ////////CADASTRO ADMINISTRADOR
 app.post('/cadastro-adm', (req, res) => {
     pool.connect((err, client, release) => {
@@ -416,7 +417,7 @@ app.post('/cadastro-servico', (req, res) => {
     })
 })
 
-////////////////////////////////////////////////////
+
 ///////////////
 
 app.post('/obter-produtos-do-fornecedor', (req, res) => {
@@ -525,7 +526,6 @@ app.post('/deletar-servico', (req, res) => {
         }
     })
 })
-
 
 
 
